@@ -45,10 +45,46 @@ This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets m
 
     c. **Access Token** - Paste the access token created for the dedicated Machine Identity
 
-## 🗒️ Notes
+## ✨ What you can do
+
+### Authenticate with a Machine Identity token
+
+- Connect directly with an Infisical **Access Token**; there is no browser login, OAuth client ID/client secret, token refresh flow, or saved session.
+- Configure the hosted Infisical URL or a self-hosted **Site URL**, your **Organization ID**, and the machine identity token in Raycast preferences.
+- Keep the token in Raycast's password preference. The extension never writes it to source files or logs it.
+
+### Browse projects quickly
+
+| Where | Shortcut | Result |
+| --- | --- | --- |
+| Project list | `Enter` | Opens the project's **Secrets** view. |
+| Project list | `Command-Enter` | Opens the project's **Details** view. |
+
+### Navigate folders and environments
+
+- The root of a project lists its immediate folders even when no secret exists at the root.
+- Folders appear before the secrets stored at the current path. Press `Enter` to open a folder and use Raycast's Back action to return to its parent.
+- The environment dropdown remains available at every level. Opening a folder preserves the environment you selected, including a non-default one.
+- The extension loads only the current folder's direct secrets and immediate child folders; it does not recursively load the whole project.
+
+### Work with secrets in the current folder
+
+- Reveal or hide values, copy a secret value, and open the related project in Infisical.
+- Create, edit, and delete secrets. Each mutation is scoped to the folder and environment currently open, avoiding collisions with a secret that has the same key elsewhere.
+- Copy the logical Infisical path without copying its value:
+
+  ```text
+  /<project-slug>/<environment>/<optional-folder-path>/<secret-key>
+  ```
+
+  For example, a root secret is `/platform/production/API_KEY`; a nested secret is `/platform/production/aws/credentials/AWS_ACCESS_KEY_ID`.
+- Copy or save the secrets currently visible in a folder as an `.env` file. Saved files go to **Downloads**; non-production environments append their environment name to the filename.
+
+## 🛡️ Security and token lifecycle
 
 - The extension does not log in or renew access tokens. Infisical enforces the token lifespan. If an operator rotates, revokes, or lets the token expire, replace the **Access Token** preference in Raycast.
-- You can `copy` or `save` all secrets of an **environment** in _.env_ format (`change` the environment using the `dropdown`). The file is `saved` in the "Downloads" folder (if the environment is not "production", the environment is appended to the extension e.g. `.env.dev`)
+- Grant the machine identity only the projects and environments it needs. The extension can perform the secret actions permitted by that token.
+- Secret paths are safe identifiers, but secret values are sensitive. Use **Copy Secret Path** when you need to share a location without exposing the value.
 
 ## Local development and validation
 
@@ -59,6 +95,13 @@ npm test
 npm run lint
 npm run build
 ```
+
+- Open a project that has secrets only in folders: its root lists folders instead of an empty state.
+- Press Enter on a folder and confirm that its direct child folders and secrets are shown.
+- Select a non-default environment before entering a folder, then confirm the nested folder loads in that environment.
+- Copy a nested secret path and confirm it includes the selected environment and nested folder path without the secret value.
+- Use Back to return to the parent folder, switch environments, and confirm the selected path remains visible.
+- In a nested folder, copy, edit, delete, and add a secret; each action remains scoped to that folder.
 
 ---
 
