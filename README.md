@@ -6,6 +6,10 @@
 
 This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets management on autopilot._
 
+> This repository is a maintained fork of the [original Infisical extension in the official Raycast Extensions repository](https://github.com/raycast/extensions/tree/main/extensions/infisical).
+>
+> It preserves the original extension as its upstream and adds direct Machine Identity access-token authentication, folder-aware secret navigation, and the workflow documented below.
+
 ## 🚀 Getting Started
 
 1. **Install this local fork**: Clone or download this repository, open a terminal in the extension directory, and run:
@@ -103,13 +107,8 @@ npm run build
 - Use Back to return to the parent folder, switch environments, and confirm the selected path remains visible.
 - In a nested folder, copy, edit, delete, and add a secret; each action remains scoped to that folder.
 
----
+## Upstream and credits
 
-Looking for more cool OSS extensions? Try these:
-
-<a title="Install appwrite Raycast Extension" href="https://www.raycast.com/xmok/appwrite"><img src="https://www.raycast.com/xmok/appwrite/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
-<a title="Install coolify Raycast Extension" href="https://www.raycast.com/xmok/coolify"><img src="https://www.raycast.com/xmok/coolify/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
-<a title="Install dokploy Raycast Extension" href="https://www.raycast.com/xmok/dokploy"><img src="https://www.raycast.com/xmok/dokploy/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
-<a title="Install keygen Raycast Extension" href="https://www.raycast.com/xmok/keygen"><img src="https://www.raycast.com/xmok/keygen/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
-<a title="Install umami Raycast Extension" href="https://www.raycast.com/xmok/umami"><img src="https://www.raycast.com/xmok/umami/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
-<a title="Install vanguard-backup Raycast Extension" href="https://www.raycast.com/xmok/vanguard-backup"><img src="https://www.raycast.com/xmok/vanguard-backup/install_button@2x.png?v=1.1" height="64" alt="" style="height: 64px;"></a>
+- **Original extension:** [Raycast Extensions — Infisical](https://github.com/raycast/extensions/tree/main/extensions/infisical)
+- **Upstream repository:** [raycast/extensions](https://github.com/raycast/extensions)
+- This fork keeps the original extension's MIT license and acknowledges its upstream authors and contributors.
