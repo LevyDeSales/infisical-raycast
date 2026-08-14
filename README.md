@@ -17,6 +17,12 @@ This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets m
 
     `npm run dev` imports the local extension into Raycast. It remains installed after you stop the development process with `Ctrl-C`.
 
+    **Manual validation checklist:**
+
+    - [ ] Select a project and press `Enter` to open **Secrets**.
+    - [ ] Select a project and press `Command-Enter` to open **Details**.
+    - [ ] In **Secrets**, use **Copy Secret Path** and confirm the clipboard contains `/<project>/<environment>/<path>/<key>`.
+
 2. **Prepare a Machine Identity**: This extension uses [Token Auth](https://infisical.com/docs/documentation/platform/identities/token-auth) through a dedicated [Machine Identity](https://infisical.com/docs/documentation/platform/identities/machine-identities):
 
     a. `Navigate` to [Project Members](https://app.infisical.com/organization/projects)

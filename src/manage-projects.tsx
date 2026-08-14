@@ -48,12 +48,12 @@ export default function SearchProjects() {
           actions={
             !isLoading && (
               <ActionPanel>
+                <Action.Push icon={Icon.Key} title="Secrets" target={<Secrets project={workspace} />} />
                 <Action.Push
                   icon={Icon.AppWindowList}
                   title="Details"
                   target={<ProjectDetails slug={workspace.slug} />}
                 />
-                <Action.Push icon={Icon.Key} title="Secrets" target={<Secrets project={workspace} />} />
               </ActionPanel>
             )
           }

@@ -24,6 +24,7 @@ import os from "os";
 import path from "path";
 import { writeFile } from "fs/promises";
 import { callInfisicalSdk } from "./authentication";
+import { buildSecretPath } from "./secret-path";
 
 async function confirmAndDelete(
   secret: Secret,
@@ -192,6 +193,10 @@ export default function Secrets({ project }: { project: Workspace }) {
                   icon={revealValues ? Icon.EyeDisabled : Icon.Eye}
                   title={revealValues ? "Hide Values" : "Reveal Values"}
                   onAction={() => setRevealValues((reveal) => !reveal)}
+                />
+                <Action.CopyToClipboard
+                  title="Copy Secret Path"
+                  content={buildSecretPath(project.slug, environment, secret.secretPath, secret.secretKey)}
                 />
                 <Action.CopyToClipboard title="Copy Secret" content={secret.secretValue} />
                 <Action.Push
