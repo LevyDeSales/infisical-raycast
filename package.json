@@ -43,6 +43,13 @@
       "subtitle": "Infisical",
       "description": "Manage Projects and Secrets",
       "mode": "view"
+    },
+    {
+      "name": "search-credentials",
+      "title": "Search Credentials",
+      "subtitle": "Infisical",
+      "description": "Find secret keys across accessible projects",
+      "mode": "view"
     }
   ],
   "dependencies": {
