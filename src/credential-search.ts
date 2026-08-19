@@ -69,45 +69,45 @@ export async function searchCredentials(
   const matches: CredentialSearchMatch[] = [];
   let failedProjectCount = 0;
   let nextWorkspaceIndex = 0;
+  const normalizedQuery = normalize(query);
 
-  async function scanNextWorkspace(): Promise<void> {
-    const workspace = eligibleWorkspaces[nextWorkspaceIndex++];
-    if (!workspace) return;
+  async function scanWorkspaces(): Promise<void> {
+    while (nextWorkspaceIndex < eligibleWorkspaces.length) {
+      const workspace = eligibleWorkspaces[nextWorkspaceIndex++];
 
-    try {
-      const response = await callInfisicalSdk(() =>
-        infisical.secrets().listSecrets({
-          projectId: workspace.id,
-          environment,
-          recursive: true,
-          viewSecretValue: false,
-          expandSecretReferences: false,
-          includeImports: false,
-        }),
-      );
+      try {
+        const response = await callInfisicalSdk(() =>
+          infisical.secrets().listSecrets({
+            projectId: workspace.id,
+            environment,
+            recursive: true,
+            viewSecretValue: false,
+            expandSecretReferences: false,
+            includeImports: false,
+          }),
+        );
 
-      matches.push(
-        ...response.secrets.map((secret) => ({
-          project: workspace,
-          environment,
-          secret: {
-            id: secret.id,
-            secretKey: secret.secretKey,
-            secretPath: secret.secretPath,
-          },
-        })),
-      );
-    } catch {
-      failedProjectCount += 1;
+        matches.push(
+          ...response.secrets
+            .filter((secret) => normalize(secret.secretKey).includes(normalizedQuery))
+            .map((secret) => ({
+              project: workspace,
+              environment,
+              secret: {
+                id: secret.id,
+                secretKey: secret.secretKey,
+                secretPath: secret.secretPath,
+              },
+            })),
+        );
+      } catch {
+        failedProjectCount += 1;
+      }
     }
-
-    await scanNextWorkspace();
   }
 
   await Promise.all(
-    Array.from({ length: Math.min(MAX_CONCURRENT_PROJECT_SCANS, eligibleWorkspaces.length) }, () =>
-      scanNextWorkspace(),
-    ),
+    Array.from({ length: Math.min(MAX_CONCURRENT_PROJECT_SCANS, eligibleWorkspaces.length) }, () => scanWorkspaces()),
   );
 
   return { matches: rankCredentialMatches(matches, query), failedProjectCount };

@@ -68,7 +68,7 @@ This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets m
 
 - Run the separate **Search Credentials** command to find matching secret keys across every project your Machine Identity can access.
 - **Production** is preselected whenever it is available; choose another environment before searching when needed. Projects without the selected environment are skipped.
-- Type a key fragment such as `plunk` and press `Enter` to search. The extension makes no Infisical request while you type, does not debounce, and never searches secret values.
+- Type a key fragment such as `plunk` and press `Enter` to search. The extension makes no secret-list request while you type, does not debounce, and never searches secret values.
 - Results show only the key plus its project, environment, and folder metadata. Press `Enter` to open the exact project folder in **Secrets**.
 - **Copy Secret Path** copies the logical path without requesting a value. **Copy Secret** is a separate explicit action that fetches only that exact secret immediately before it copies it.
 
@@ -114,7 +114,7 @@ npm run build
 - Copy a nested secret path and confirm it includes the selected environment and nested folder path without the secret value.
 - Use Back to return to the parent folder, switch environments, and confirm the selected path remains visible.
 - In a nested folder, copy, edit, delete, and add a secret; each action remains scoped to that folder.
-- Open **Search Credentials** and confirm **Production** is preselected when available. Type a query and confirm that no request starts before `Enter`.
+- Open **Search Credentials** and confirm **Production** is preselected when available. Type a query and confirm that no secret-list request starts before `Enter`.
 - Submit `plunk`; confirm matching keys from eligible projects include project/path metadata but no secret values.
 - Change the environment and submit again; projects that do not expose it must not appear in the search.
 - Press `Enter` on a result to open its exact folder. Confirm **Copy Secret Path** is canonical and **Copy Secret** runs only after explicit selection.

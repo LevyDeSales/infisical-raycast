@@ -14,7 +14,7 @@
 
 - Add an independent Search Credentials view command; do not alter Manage Projects.
 - Default to an accessible environment named Production case-insensitively, accepting either prod or production as its slug; otherwise use the first available environment.
-- Never request while typing. A required nonblank query is submitted only by the form Enter action; do not add debounce, polling, or a persistent cache.
+- Never issue a secret-list request while typing. A required nonblank query is submitted only by the form Enter action; loading accessible projects for the form is separate. Do not add debounce, polling, or a persistent cache.
 - Search only case-insensitive secretKey text. Never inspect, render, log, cache, rank, or add test-fixture values for secretValue.
 - Every scan must use recursive: true, viewSecretValue: false, expandSecretReferences: false, and includeImports: false.
 - Scan only projects that contain the selected environment, run no more than five project scans at once, and preserve successes if another project fails.
@@ -390,7 +390,7 @@ Append this separate command object without changing manage-projects:
 
 Add a README section named Search credentials across projects. State that Production is preselected when available; pressing Enter starts the only scan; matching is key-only in one selected environment; result metadata identifies project and path; Copy Secret Path never retrieves a value; Copy Secret retrieves one exact value only after explicit action. Add these manual validation checks:
 
-1. Search Credentials preselects Production and makes no request while typing.
+1. Search Credentials preselects Production and makes no secret-list request while typing.
 2. Submitting plunk shows matching keys from eligible projects without values.
 3. Changing environment excludes projects that lack it.
 4. Enter opens the exact folder; path copy is canonical; value copy occurs only after explicit action.

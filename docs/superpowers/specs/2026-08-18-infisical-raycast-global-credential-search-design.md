@@ -13,7 +13,7 @@ The extension adds a view command named `Search Credentials`.
 1. The command opens a form with a required search field and an environment selector.
 2. The selector defaults to the available environment named `Production` (case-insensitive), regardless of whether its Infisical slug is `prod` or `production`. If none is available, it defaults to the first available environment instead.
 3. The selector contains the union of environments available to accessible projects. Changing it is the only way to search another environment.
-4. Typing makes **no** Infisical request. Pressing Enter submits the form and starts a single search. There is no debounce and no automatic search while the query changes.
+4. Typing makes **no secret-list request**. Pressing Enter submits the form and starts a single search. There is no debounce and no automatic search while the query changes. Loading the accessible-project/environment selector when the command opens is separate from a secret scan.
 5. The search results show only matches where the secret key contains the query, case-insensitively. Empty or whitespace-only queries cannot be submitted.
 
 The result list displays the secret key as its title and the project name, selected environment, and folder path as metadata. It does not render a detail pane containing a value, nor does it offer value-based filtering.
@@ -87,7 +87,7 @@ Automated coverage must establish:
 Manual Raycast validation:
 
 1. Open `Search Credentials`; `Production` is selected by default when available.
-2. Type `plunk`, press Enter, and verify no request is sent before the submission.
+2. Type `plunk`, press Enter, and verify no secret-list request is sent before the submission.
 3. Verify matches come from more than one accessible project when applicable and show project/path metadata, never values.
 4. Change the environment, submit again, and verify only projects that expose it are scanned.
 5. Press Enter on a result and verify it opens the matching project folder in `Secrets`.

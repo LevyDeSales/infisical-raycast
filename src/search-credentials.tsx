@@ -12,7 +12,7 @@ import {
   Toast,
   useNavigation,
 } from "@raycast/api";
-import { FormValidation, useCachedPromise, useForm, usePromise } from "@raycast/utils";
+import { useCachedPromise, useForm, usePromise } from "@raycast/utils";
 import {
   copyMatchedSecret,
   getDefaultSearchEnvironment,
@@ -76,12 +76,16 @@ type CredentialSearchFormProps = {
   environments: SearchEnvironment[];
 };
 
+function validateSearchQuery(value: string | undefined) {
+  return value?.trim() ? undefined : "Search query is required.";
+}
+
 export function CredentialSearchForm({ workspaces, environments }: CredentialSearchFormProps) {
   const { push } = useNavigation();
   const defaultEnvironment = getDefaultSearchEnvironment(environments) ?? environments[0]?.slug;
   const { handleSubmit, itemProps } = useForm<{ query: string; environment: string }>({
     initialValues: { query: "", environment: defaultEnvironment },
-    validation: { query: FormValidation.Required },
+    validation: { query: validateSearchQuery },
     onSubmit(values) {
       const query = values.query.trim();
       if (!query) return;
@@ -145,6 +149,12 @@ export function CredentialSearchResults({ workspaces, query, environment }: Cred
           title="No Matching Secret Keys"
           description={emptySearchDescription(query, environment, outcome?.failedProjectCount ?? 0)}
         />
+      ) : outcome?.failedProjectCount ? (
+        <List.Section title="Search Results" subtitle={failedProjectSubtitle(outcome.failedProjectCount)}>
+          {outcome.matches.map((match) => (
+            <CredentialSearchItem key={match.secret.id} match={match} />
+          ))}
+        </List.Section>
       ) : (
         outcome?.matches.map((match) => <CredentialSearchItem key={match.secret.id} match={match} />)
       )}
@@ -153,9 +163,13 @@ export function CredentialSearchResults({ workspaces, query, environment }: Cred
 }
 
 function emptySearchDescription(query: string, environment: string, failedProjectCount: number) {
-  const failureSuffix = failedProjectCount ? ` ${failedProjectCount} project scan(s) failed.` : "";
+  const failureSuffix = failedProjectCount ? ` ${failedProjectSubtitle(failedProjectCount)}.` : "";
 
   return `No accessible secret key matches “${query}” in ${environment}.${failureSuffix}`;
+}
+
+function failedProjectSubtitle(failedProjectCount: number) {
+  return `${failedProjectCount} project scan${failedProjectCount === 1 ? "" : "s"} failed`;
 }
 
 export function CredentialSearchItem({ match }: { match: CredentialSearchMatch }) {
