@@ -1,6 +1,7 @@
 import { Action, ActionPanel, Detail, getPreferenceValues, Icon, List, openExtensionPreferences } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
 import { Project } from "@infisical/sdk";
+import { callInfisical } from "./infisical";
 import Secrets from "./secrets";
 import { listAccessibleWorkspaces } from "./workspaces";
 
