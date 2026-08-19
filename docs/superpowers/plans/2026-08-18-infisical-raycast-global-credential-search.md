@@ -17,7 +17,7 @@
 - Never issue a secret-list request while typing. A required nonblank query is submitted only by the form Enter action; loading accessible projects for the form is separate. Do not add debounce, polling, or a persistent cache.
 - Search only case-insensitive secretKey text. Never inspect, render, log, cache, rank, or add test-fixture values for secretValue.
 - Every scan must use recursive: true, viewSecretValue: false, expandSecretReferences: false, and includeImports: false.
-- Scan only projects that contain the selected environment, run no more than five project scans at once, and preserve successes if another project fails.
+- Scan only projects that contain the selected environment, run no more than twenty project scans at once, and preserve successes if another project fails.
 - Results retain project, environment, folder path, and key. Enter navigates there; Copy Secret Path is value-free; Copy Secret fetches exactly that one secret only after explicit user action.
 - Preserve direct Access Token authentication, sanitized error handling, folder navigation, and existing tests.
 
@@ -121,7 +121,7 @@ export type CredentialSearchMatch = {
 };
 export type CredentialSearchOutcome = { matches: CredentialSearchMatch[]; failedProjectCount: number };
 
-export const MAX_CONCURRENT_PROJECT_SCANS = 5;
+export const MAX_CONCURRENT_PROJECT_SCANS = 20;
 export function getSearchEnvironments(workspaces: Workspace[]): SearchEnvironment[];
 export function getDefaultSearchEnvironment(environments: SearchEnvironment[]): string | undefined;
 export function rankCredentialMatches(matches: CredentialSearchMatch[], query: string): CredentialSearchMatch[];
@@ -204,7 +204,7 @@ it("fetches one exact secret only after Copy Secret is invoked", async () => {
 });
 ~~~
 
-Use a deferred listSecrets mock across six eligible workspaces. Count active calls before resolving each deferred promise and assert maxActive is less than or equal to MAX_CONCURRENT_PROJECT_SCANS. Reject one request, resolve another with a matching key, and assert failedProjectCount is 1 while the successful match remains.
+Use a deferred listSecrets mock across twenty-one eligible workspaces. Count active calls before resolving each deferred promise and assert maxActive is less than or equal to MAX_CONCURRENT_PROJECT_SCANS. Reject one request, resolve another with a matching key, and assert failedProjectCount is 1 while the successful match remains.
 
 Keep copiedValue a neutral marker and assert the scan outcome never has a secretValue property.
 
@@ -424,7 +424,7 @@ git commit -m "docs(search): document global credential search workflow"
 
 ## Plan self-review
 
-**Spec coverage:** Task 1 retains the direct Access Token workspace boundary. Task 2 covers Production defaulting, value-safe recursive requests, five-way concurrency, key-only matching/ranking, partial failures, metadata retention, and deferred one-value retrieval. Task 3 supplies the Enter-only form, global environment selector, exact navigation, safe path copy, and explicit value-copy UI. Task 4 registers the distinct command, documents user-visible safety behavior, and completes automated and Raycast validation.
+**Spec coverage:** Task 1 retains the direct Access Token workspace boundary. Task 2 covers Production defaulting, value-safe recursive requests, twenty-way rolling concurrency, key-only matching/ranking, partial failures, metadata retention, and deferred one-value retrieval. Task 3 supplies the Enter-only form, global environment selector, exact navigation, safe path copy, and explicit value-copy UI. Task 4 registers the distinct command, documents user-visible safety behavior, and completes automated and Raycast validation.
 
 **Placeholder scan:** The red-flag scan returned no implementation placeholders or vague test/error-handling instructions. Every code task supplies concrete interfaces, test expectations, and commands.
 

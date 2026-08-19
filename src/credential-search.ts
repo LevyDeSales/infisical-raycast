@@ -2,7 +2,7 @@ import { callInfisicalSdk } from "./authentication";
 import { infisical } from "./infisical";
 import type { Workspace } from "./types";
 
-export const MAX_CONCURRENT_PROJECT_SCANS = 5;
+export const MAX_CONCURRENT_PROJECT_SCANS = 20;
 
 export type SearchEnvironment = { name: string; slug: string };
 

@@ -45,7 +45,7 @@ The Infisical SDK has no server-side text filter for secret keys, so a submitted
    });
    ```
 
-4. Run at most five list requests at once. This bounded fan-out avoids issuing one request per project simultaneously while keeping searches responsive for normal organizations.
+4. Run at most twenty list requests at once. This rolling bounded fan-out starts the next eligible project only when a prior scan completes, avoiding an unbounded request burst while reducing total search latency.
 5. Filter only `secretKey` in memory and produce metadata-only result records that retain the originating project, selected environment, folder path, and key.
 
 There is deliberately no cross-search cache in the MVP. Each explicit submission observes the current state of the selected environment and keeps the first release simple; a later release can add a time-bounded metadata cache if measurements show that it is needed.
@@ -80,7 +80,7 @@ Automated coverage must establish:
 - environment union/default selection and exclusion of projects that do not contain the selected environment;
 - recursive scan payloads explicitly disable secret values and reference expansion;
 - case-insensitive matching and ranking operate only on `secretKey`;
-- the concurrency helper never exceeds five in-flight project requests and preserves successes when another project fails;
+- the concurrency helper never exceeds twenty in-flight project requests and preserves successes when another project fails;
 - result routing retains the exact project, environment, and folder path;
 - `Copy Secret Path` remains value-free, while `Copy Secret` fetches exactly one secret only after its action is invoked.
 

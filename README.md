@@ -69,6 +69,7 @@ This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets m
 - Run the separate **Search Credentials** command to find matching secret keys across every project your Machine Identity can access.
 - **Production** is preselected whenever it is available; choose another environment before searching when needed. Projects without the selected environment are skipped.
 - Type a key fragment such as `plunk` and press `Enter` to search. The extension makes no secret-list request while you type, does not debounce, and never searches secret values.
+- A submitted search scans at most 20 projects at once. It uses a rolling worker pool: when one project finishes, the next eligible project starts, rather than sending requests to every project simultaneously.
 - Results show only the key plus its project, environment, and folder metadata. Press `Enter` to open the exact project folder in **Secrets**.
 - **Copy Secret Path** copies the logical path without requesting a value. **Copy Secret** is a separate explicit action that fetches only that exact secret immediately before it copies it.
 

@@ -107,8 +107,10 @@ describe("credential search", () => {
     });
   });
 
-  it("limits concurrent scans and keeps successful matches when a project fails", async () => {
-    const projects = Array.from({ length: MAX_CONCURRENT_PROJECT_SCANS + 1 }, (_, index) =>
+  it("runs up to twenty concurrent scans and keeps successful matches when a project fails", async () => {
+    expect(MAX_CONCURRENT_PROJECT_SCANS).toBe(20);
+
+    const projects = Array.from({ length: 21 }, (_, index) =>
       workspace(`project-${index + 1}`, [{ name: "Production", slug: "prod" }]),
     );
     const requests: Array<{
@@ -139,13 +141,15 @@ describe("credential search", () => {
 
     const outcome = searchCredentials(projects, "prod", "plunk");
 
-    await vi.waitFor(() => expect(requests).toHaveLength(MAX_CONCURRENT_PROJECT_SCANS));
+    await vi.waitFor(() => expect(requests).toHaveLength(20));
     const initialRequests = requests.splice(0);
     initialRequests[0].reject(new Error("request failed"));
+    await vi.waitFor(() => expect(requests).toHaveLength(1));
+    expect(active).toBe(20);
+
     initialRequests
       .slice(1)
       .forEach((request, index) => request.resolve({ secrets: index === 0 ? [sdkSecret("PLUNK_API_KEY")] : [] }));
-    await vi.waitFor(() => expect(requests).toHaveLength(1));
     requests[0].resolve({ secrets: [] });
 
     await expect(outcome).resolves.toMatchObject({
@@ -154,7 +158,7 @@ describe("credential search", () => {
         expect.objectContaining({ secret: { id: "PLUNK_API_KEY", secretKey: "PLUNK_API_KEY", secretPath: "/" } }),
       ],
     });
-    expect(maxActive).toBeLessThanOrEqual(MAX_CONCURRENT_PROJECT_SCANS);
+    expect(maxActive).toBeLessThanOrEqual(20);
   });
 
   it("fetches one exact secret only after Copy Secret is invoked", async () => {
