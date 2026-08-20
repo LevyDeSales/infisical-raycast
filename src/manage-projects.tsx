@@ -1,9 +1,9 @@
 import { Action, ActionPanel, Detail, getPreferenceValues, Icon, List, openExtensionPreferences } from "@raycast/api";
 import { useCachedPromise } from "@raycast/utils";
-import { authenticate, callInfisical } from "./infisical";
 import { Project } from "@infisical/sdk";
-import { Workspace } from "./types";
+import { callInfisical } from "./infisical";
 import Secrets from "./secrets";
+import { listAccessibleWorkspaces } from "./workspaces";
 
 const { organizationId } = getPreferenceValues<Preferences>();
 export default function SearchProjects() {
@@ -11,17 +11,9 @@ export default function SearchProjects() {
     isLoading,
     data: workspaces,
     error,
-  } = useCachedPromise(
-    async () => {
-      await authenticate();
-      const result = await callInfisical<{ workspaces: Workspace[] }>(`v2/organizations/${organizationId}/workspaces`);
-      return result.workspaces;
-    },
-    [],
-    {
-      initialData: [],
-    },
-  );
+  } = useCachedPromise(() => listAccessibleWorkspaces(organizationId), [], {
+    initialData: [],
+  });
 
   if (error)
     return (
