@@ -202,6 +202,6 @@ describe("Search Credentials command", () => {
     await onAction?.();
 
     expect(copyMatchedSecret).toHaveBeenCalledWith(match);
-    expect(clipboardCopy).toHaveBeenCalledWith("copied-only-on-action");
+    expect(clipboardCopy).toHaveBeenCalledWith("copied-only-on-action", { concealed: true });
   });
 });
