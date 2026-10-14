@@ -236,7 +236,7 @@ export default function Secrets({
                     title="Copy Secret Path"
                     content={buildSecretPath(project.slug, environment, secret.secretPath, secret.secretKey)}
                   />
-                  <Action.CopyToClipboard title="Copy Secret" content={secret.secretValue} />
+                  <Action.CopyToClipboard title="Copy Secret" content={secret.secretValue} concealed />
                   <Action.Push
                     icon={Icon.Pencil}
                     title="Edit Secret"
@@ -263,6 +263,7 @@ export default function Secrets({
                     // eslint-disable-next-line @raycast/prefer-title-case
                     title="Copy All as .env"
                     content={combineSecretsAsEnv(directory.secrets)}
+                    concealed
                     shortcut={Keyboard.Shortcut.Common.Copy}
                   />
                   <Action

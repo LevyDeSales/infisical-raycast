@@ -23,6 +23,7 @@ vi.mock("@raycast/api", () => {
   const Action = Object.assign(component(), {
     CopyToClipboard: component(),
     Push: component(),
+    Style: { Destructive: "destructive" },
     SubmitForm: component(),
   });
   const Form = Object.assign(component(), {
@@ -80,6 +81,20 @@ function findElement(node: unknown, type: unknown): ReactElement | undefined {
     .find(Boolean);
 }
 
+type CopyProps = { title: string; content: string; concealed?: boolean };
+
+function findAllElements(node: unknown, type: unknown): ReactElement[] {
+  if (Array.isArray(node)) return node.flatMap((child) => findAllElements(child, type));
+  if (!node || typeof node !== "object" || !("props" in node) || !("type" in node)) return [];
+
+  const element = node as ReactElement;
+  const found = element.type === type ? [element] : [];
+  return [
+    ...found,
+    ...Object.values(element.props as Record<string, unknown>).flatMap((value) => findAllElements(value, type)),
+  ];
+}
+
 describe("Secrets folder navigation", () => {
   const project: Workspace = {
     id: "project-1",
@@ -118,5 +133,42 @@ describe("Secrets folder navigation", () => {
     expect(loadSecretDirectory).toHaveBeenLastCalledWith("project-1", "prod", "/credentials");
     expect(child.props.environment).toBe("prod");
     expect(environmentDropdown?.props.value).toBe("prod");
+  });
+});
+
+describe("Secrets clipboard", () => {
+  const project: Workspace = {
+    id: "project-1",
+    name: "Example",
+    slug: "example",
+    organization: "organization-1",
+    environments: [{ name: "Production", slug: "prod" }],
+  };
+
+  beforeEach(() => {
+    useState
+      .mockReset()
+      .mockReturnValueOnce(["prod", vi.fn()])
+      .mockImplementation((initialValue) => [initialValue, vi.fn()]);
+    usePromise.mockReset().mockReturnValue({
+      data: {
+        folders: [],
+        secrets: [{ id: "secret-1", secretKey: "API_KEY", secretValue: "value-1", secretPath: "/", tags: [] }],
+      },
+      mutate: vi.fn(),
+    });
+  });
+
+  it("keeps copied secret values out of Clipboard History but not the secret path", () => {
+    const copyActions = findAllElements(Secrets({ project }), Action.CopyToClipboard);
+    const byTitle: Record<string, CopyProps> = {};
+    for (const action of copyActions) {
+      const props = action.props as CopyProps;
+      byTitle[props.title] = props;
+    }
+
+    expect(byTitle["Copy Secret"]).toMatchObject({ content: "value-1", concealed: true });
+    expect(byTitle["Copy All as .env"]).toMatchObject({ content: "API_KEY=value-1", concealed: true });
+    expect(byTitle["Copy Secret Path"].concealed).toBeUndefined();
   });
 });

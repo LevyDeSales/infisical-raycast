@@ -208,7 +208,7 @@ async function copySecret(match: CredentialSearchMatch) {
 
   try {
     const value = await copyMatchedSecret(match);
-    await Clipboard.copy(value);
+    await Clipboard.copy(value, { concealed: true });
     toast.style = Toast.Style.Success;
     toast.title = "Copied Secret";
   } catch (error) {
