@@ -6,9 +6,9 @@
 
 This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets management on autopilot._
 
-> This extension is derived from the [original Infisical extension in the official Raycast Extensions repository](https://github.com/raycast/extensions/tree/main/extensions/infisical) (MIT-licensed, by its original authors and contributors). This repository contains only that extension and has its own history.
+> This extension is derived from the [original Infisical extension in the official Raycast Extensions repository](https://github.com/raycast/extensions/tree/main/extensions/infisical) (MIT-licensed, by xmok and contributors). This repository contains only that extension and has its own history.
 >
-> **My contributions include:** direct Machine Identity access-token authentication, the separate **Search Credentials** command, and the automated tests (Vitest). Credits are at the bottom.
+> **My contributions include:** direct Machine Identity access-token authentication, folder navigation, **Copy Secret Path**, the separate **Search Credentials** command, and the automated tests (Vitest). Credits are at the bottom.
 
 ## 🚀 Getting Started
 
