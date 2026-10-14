@@ -6,13 +6,13 @@
 
 This is a Raycast extension for [Infisical](https://infisical.com/) - _Secrets management on autopilot._
 
-> This repository is a maintained fork of the [original Infisical extension in the official Raycast Extensions repository](https://github.com/raycast/extensions/tree/main/extensions/infisical).
+> This extension is derived from the [original Infisical extension in the official Raycast Extensions repository](https://github.com/raycast/extensions/tree/main/extensions/infisical) (MIT-licensed, by its original authors and contributors). This repository contains only that extension and has its own history.
 >
-> It preserves the original extension as its upstream and adds direct Machine Identity access-token authentication, folder-aware secret navigation, and the workflow documented below.
+> **My contributions include:** direct Machine Identity access-token authentication, the separate **Search Credentials** command, and the automated tests (Vitest). Credits are at the bottom.
 
 ## 🚀 Getting Started
 
-1. **Install this local fork**: Clone or download this repository, open a terminal in the extension directory, and run:
+1. **Install this extension locally**: Clone or download this repository, open a terminal in the extension directory, and run:
 
     ```sh
     npm ci
@@ -124,4 +124,4 @@ npm run build
 
 - **Original extension:** [Raycast Extensions — Infisical](https://github.com/raycast/extensions/tree/main/extensions/infisical)
 - **Upstream repository:** [raycast/extensions](https://github.com/raycast/extensions)
-- This fork keeps the original extension's MIT license and acknowledges its upstream authors and contributors.
+- The MIT license of the original extension is kept in [LICENSE](LICENSE), together with the copyright line for my changes. Upstream authors and contributors are credited above.
